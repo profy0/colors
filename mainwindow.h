@@ -22,6 +22,7 @@ protected:
 
 private slots:
     void on_chooseColorButton_clicked();
+    void recalcRGB();
 
 private:
     Ui::MainWindow *ui;

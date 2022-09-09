@@ -40,7 +40,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="rgbLabel">
          <property name="text">
           <string>RGB:</string>
          </property>
@@ -72,28 +72,31 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="hsvLabel">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
          <property name="text">
           <string>HSV:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_7">
+        <widget class="QLineEdit" name="hsv1">
          <property name="text">
           <string>0</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_8">
+        <widget class="QLineEdit" name="hsv2">
          <property name="text">
           <string>0</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_9">
+        <widget class="QLineEdit" name="hsv3">
          <property name="text">
           <string>0</string>
          </property>
@@ -104,28 +107,28 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_6">
        <item>
-        <widget class="QLabel" name="label_6">
+        <widget class="QLabel" name="hlsLabel">
          <property name="text">
           <string>HLS:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_16">
+        <widget class="QLineEdit" name="hls1">
          <property name="text">
           <string>0</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_17">
+        <widget class="QLineEdit" name="hls2">
          <property name="text">
           <string>0</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_18">
+        <widget class="QLineEdit" name="hls3">
          <property name="text">
           <string>0</string>
          </property>
@@ -136,28 +139,28 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_5">
        <item>
-        <widget class="QLabel" name="label_5">
+        <widget class="QLabel" name="xyzLabel">
          <property name="text">
           <string>XYZ:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_13">
+        <widget class="QLineEdit" name="xyz1">
          <property name="text">
           <string>0</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_14">
+        <widget class="QLineEdit" name="xyz2">
          <property name="text">
           <string>0</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_15">
+        <widget class="QLineEdit" name="xyz3">
          <property name="text">
           <string>0</string>
          </property>
@@ -168,28 +171,28 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QLabel" name="label_4">
+        <widget class="QLabel" name="labLabel">
          <property name="text">
           <string>LAB:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_10">
+        <widget class="QLineEdit" name="lab1">
          <property name="text">
           <string>0</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_11">
+        <widget class="QLineEdit" name="lab2">
          <property name="text">
           <string>0</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_12">
+        <widget class="QLineEdit" name="lab3">
          <property name="text">
           <string>0</string>
          </property>
@@ -200,35 +203,35 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="cmykLabel">
          <property name="text">
           <string>CMYK:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_4">
+        <widget class="QLineEdit" name="cmyk1">
          <property name="text">
           <string>0</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_5">
+        <widget class="QLineEdit" name="cmyk2">
          <property name="text">
           <string>0</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_6">
+        <widget class="QLineEdit" name="cmyk3">
          <property name="text">
           <string>0</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit">
+        <widget class="QLineEdit" name="cmyk4">
          <property name="text">
           <string>0</string>
          </property>

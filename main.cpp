@@ -6,8 +6,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    w.setMinimumHeight(460);
-    w.setMaximumHeight(460);
+    w.setMinimumHeight(410);
+    w.setMaximumHeight(410);
     w.setMinimumWidth(460);
     w.setMaximumWidth(460);
     w.show();

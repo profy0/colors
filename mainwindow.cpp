@@ -24,8 +24,15 @@ MainWindow::MainWindow(QWidget *parent)
    /* parent->setLayout(layout);
     parent->show();*/
   //  setLayout(layout);
-
-
+    connect(ui->rgb1, SIGNAL(textChanged(QString)), this, SLOT(recalcRGB()));
+    connect(ui->rgb2, SIGNAL(textChanged(QString)), this, SLOT(recalcRGB()));
+    connect(ui->rgb3, SIGNAL(textChanged(QString)), this, SLOT(recalcRGB()));
+    QString range = "(?:0|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])";
+    QRegExp regex ("^" + range + "$");
+    QRegExpValidator *valid = new QRegExpValidator(regex, this);
+    ui->rgb1->setValidator(valid);
+    ui->rgb2->setValidator(valid);
+    ui->rgb3->setValidator(valid);
 }
 
 void MainWindow::paintEvent(QPaintEvent *) {
@@ -49,5 +56,13 @@ void MainWindow::on_chooseColorButton_clicked()
     ui->rgb1->setText(QString::number(color.red()));
     ui->rgb2->setText(QString::number(color.green()));
     ui->rgb3->setText(QString::number(color.blue()));
+}
+
+void MainWindow::recalcRGB()
+{
+
+    color.setRgb(ui->rgb1->text().toInt(), ui->rgb2->text().toInt(), ui->rgb3->text().toInt());
+    update();
+  //  qDebug() << "changed";
 }
 
