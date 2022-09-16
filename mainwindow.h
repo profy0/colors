@@ -23,6 +23,9 @@ protected:
 private slots:
     void on_chooseColorButton_clicked();
     void recalcRGB();
+    void recalcCMYK();
+    void recalcHSV();
+    void recalcHLS();
 
 private:
     Ui::MainWindow *ui;

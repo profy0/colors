@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>463</width>
-    <height>453</height>
+    <width>714</width>
+    <height>451</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
      <rect>
       <x>230</x>
       <y>0</y>
-      <width>201</width>
+      <width>461</width>
       <height>401</height>
      </rect>
     </property>
@@ -109,7 +109,7 @@
        <item>
         <widget class="QLabel" name="hlsLabel">
          <property name="text">
-          <string>HLS:</string>
+          <string>HSL:</string>
          </property>
         </widget>
        </item>
@@ -147,6 +147,9 @@
        </item>
        <item>
         <widget class="QLineEdit" name="xyz1">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>0</string>
          </property>
@@ -154,6 +157,9 @@
        </item>
        <item>
         <widget class="QLineEdit" name="xyz2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>0</string>
          </property>
@@ -161,6 +167,9 @@
        </item>
        <item>
         <widget class="QLineEdit" name="xyz3">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>0</string>
          </property>
@@ -179,6 +188,9 @@
        </item>
        <item>
         <widget class="QLineEdit" name="lab1">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>0</string>
          </property>
@@ -186,6 +198,9 @@
        </item>
        <item>
         <widget class="QLineEdit" name="lab2">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>0</string>
          </property>
@@ -193,6 +208,9 @@
        </item>
        <item>
         <widget class="QLineEdit" name="lab3">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>0</string>
          </property>
@@ -247,7 +265,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>463</width>
+     <width>714</width>
      <height>25</height>
     </rect>
    </property>
