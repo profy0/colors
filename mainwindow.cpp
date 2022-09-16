@@ -24,6 +24,9 @@ MainWindow::MainWindow(QWidget *parent)
    /* parent->setLayout(layout);
     parent->show();*/
   //  setLayout(layout);
+
+
+
     connect(ui->rgb1, SIGNAL(textEdited(QString)), this, SLOT(recalcRGB()));
     connect(ui->rgb2, SIGNAL(textEdited(QString)), this, SLOT(recalcRGB()));
     connect(ui->rgb3, SIGNAL(textEdited(QString)), this, SLOT(recalcRGB()));
@@ -158,6 +161,7 @@ void MainWindow::recalcHLS()
     ui->hsv1->setText(QString::number(color.hueF()));
     ui->hsv2->setText(QString::number(color.saturationF()));
     ui->hsv3->setText(QString::number(color.valueF()));
+    update();
 }
 
 
