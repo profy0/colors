@@ -12,6 +12,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->chooseColorButton->setText("Choose color");
 
+  /*  ww = new widget(this);
+    ui->verticalLayout->addWidget(ww);
+*/
    /* ww = new widget(this);
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(ww);
@@ -41,6 +44,19 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->hls2, SIGNAL(textEdited(QString)), this, SLOT(recalcHLS()));
     connect(ui->hls3, SIGNAL(textEdited(QString)), this, SLOT(recalcHLS()));
 
+
+    ui->rgb1->hide();
+    ui->rgb2->hide();
+    ui->rgb3->hide();
+    ui->rgbLabel->hide();
+
+
+    ui->rgb1->show();
+    ui->rgb2->show();
+    ui->rgb3->show();
+    ui->rgbLabel->show();
+
+
     QString range = "(?:0|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])";
     QString rangeFloat = "(?:0[.][0-9]{1,}|1)";
     QRegExp regex ("^" + range + "$");
@@ -61,15 +77,56 @@ MainWindow::MainWindow(QWidget *parent)
     ui->cmyk3->setValidator(validFloat);
     ui->cmyk4->setValidator(validFloat);
 
+    ui->chooseColorButton->setStyleSheet("QPushButton { color: rgb(255,255,255); background: rgb(75,75,75); }");
+
+    ui->rgb1->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+    ui->rgb2->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+    ui->rgb3->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+
+    ui->hsv1->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+    ui->hsv2->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+    ui->hsv3->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+
+    ui->hls1->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+    ui->hls2->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+    ui->hls3->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+
+    ui->cmyk1->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+    ui->cmyk2->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+    ui->cmyk3->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+    ui->cmyk4->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+
+    QPalette darkPalette;
+    darkPalette.setColor(QPalette::Window, QColor(50,50,50));
+
+  //  darkPalette.setColor(QPalette::Base, QColor(52,89,111));
+    darkPalette.setColor(QPalette::WindowText, QColor(255,255,255));
+ /*   darkPalette.setColor(QPalette::HighlightedText, QColor(255,0,0));
+    darkPalette.setColor(QPalette::Highlight, QColor(245,245,245));*/
+  //  darkPalette.setColor(QPalette::Base, QColor(52,89,111));
+ //   darkPalette.setColor(QPalette::Text, QColor(255,255,255));
+ /*   darkPalette.setColor(QPalette::Button, QColor(0,0,0));
+    darkPalette.setColor(QPalette::ButtonText, QColor(245,245,245));*/
+    this->setPalette(darkPalette);
+
     //recalcRGB();
 }
 
 void MainWindow::paintEvent(QPaintEvent *) {
     QPainter p;
     p.begin(this);
-    p.setPen(color);
-    p.setBrush(color);
+    p.setPen(QColor(75,75,75));
+    QLinearGradient gradient(20,20,20,200);
+    gradient.setColorAt(0.0, Qt::white);
+    gradient.setColorAt(1.0, color);
+    p.setBrush(gradient);
     p.drawPolygon(QPolygon()<<QPoint(20, 20)<<QPoint(20, 200)<<QPoint(200, 200)<<QPoint(200,20));
+    /*  p.setPen(color);
+    p.setBrush(color);
+    p.drawPolygon(QPolygon()<<QPoint(20, 20)<<QPoint(20, 200)<<QPoint(200, 200)<<QPoint(200,20));*/
+
+
+
     p.end();
 }
 
