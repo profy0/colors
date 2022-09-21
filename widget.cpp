@@ -3,6 +3,7 @@
 widget::widget(QWidget *parent) : QWidget(parent)
 {
     color = Qt::white;
+
 }
 
 void widget::paintEvent(QPaintEvent *)

@@ -27,11 +27,24 @@ private slots:
     void recalcHSV();
     void recalcHLS();
 
+    void on_cmyk_stateChanged(int arg1);
+
+    void on_lab_stateChanged(int arg1);
+
+    void on_xyz_stateChanged(int arg1);
+
+    void on_hsl_stateChanged(int arg1);
+
+    void on_hsv_stateChanged(int arg1);
+
+    void on_rgb_stateChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
     QColor color;
     widget *ww;
     QPushButton *chooseColorButton;
+    int howManyLinesDisplayed;
 
 };
 #endif // MAINWINDOW_H
