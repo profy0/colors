@@ -26,7 +26,7 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>350</x>
@@ -153,7 +153,7 @@
        <item>
         <widget class="QLineEdit" name="xyz1">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>0</string>
@@ -163,7 +163,7 @@
        <item>
         <widget class="QLineEdit" name="xyz2">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>0</string>
@@ -173,7 +173,7 @@
        <item>
         <widget class="QLineEdit" name="xyz3">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>0</string>
@@ -194,7 +194,7 @@
        <item>
         <widget class="QLineEdit" name="lab1">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>0</string>
@@ -204,7 +204,7 @@
        <item>
         <widget class="QLineEdit" name="lab2">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>0</string>
@@ -214,7 +214,7 @@
        <item>
         <widget class="QLineEdit" name="lab3">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>0</string>
@@ -268,7 +268,7 @@
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>340</y>
+      <y>350</y>
       <width>621</width>
       <height>91</height>
      </rect>
@@ -357,6 +357,24 @@
     </property>
     <property name="text">
      <string>PushButton</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="warning">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>310</y>
+      <width>421</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>6</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
     </property>
    </widget>
   </widget>

@@ -52,6 +52,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->hls1, SIGNAL(textEdited(QString)), this, SLOT(recalcHLS()));
     connect(ui->hls2, SIGNAL(textEdited(QString)), this, SLOT(recalcHLS()));
     connect(ui->hls3, SIGNAL(textEdited(QString)), this, SLOT(recalcHLS()));
+    connect(ui->xyz1, SIGNAL(textEdited(QString)), this, SLOT(recalcXYZ()));
+    connect(ui->xyz2, SIGNAL(textEdited(QString)), this, SLOT(recalcXYZ()));
+    connect(ui->xyz3, SIGNAL(textEdited(QString)), this, SLOT(recalcXYZ()));
 
     ui->rgb1->hide();
     ui->rgb2->hide();
@@ -160,6 +163,11 @@ MainWindow::MainWindow(QWidget *parent)
     ui->hls1->setText(QString::number(color.hslHueF()));
     ui->hls2->setText(QString::number(color.hslSaturationF()));
     ui->hls3->setText(QString::number(color.lightnessF()));
+    std::pair<float, std::pair<float, float> > xyz = RGBtoXYZ();
+    ui->xyz1->setText(QString::number(xyz.first));
+    ui->xyz2->setText(QString::number(xyz.second.first));
+    ui->xyz3->setText(QString::number(xyz.second.second));
+    ui->warning->clear();
     update();
 }
 
@@ -198,13 +206,17 @@ void MainWindow::on_chooseColorButton_clicked()
     ui->hls1->setText(QString::number(color.hslHueF()));
     ui->hls2->setText(QString::number(color.hslSaturationF()));
     ui->hls3->setText(QString::number(color.lightnessF()));
+    std::pair<float, std::pair<float, float> > xyz = RGBtoXYZ();
+    ui->xyz1->setText(QString::number(xyz.first));
+    ui->xyz2->setText(QString::number(xyz.second.first));
+    ui->xyz3->setText(QString::number(xyz.second.second));
+    ui->warning->clear();
     update();
 
 }
 
 void MainWindow::recalcRGB()
 {
-
     color.setRgb(ui->rgb1->text().toInt(), ui->rgb2->text().toInt(), ui->rgb3->text().toInt());
     ui->cmyk1->setText(QString::number(color.cyanF()));
     ui->cmyk2->setText(QString::number(color.magentaF()));
@@ -216,8 +228,12 @@ void MainWindow::recalcRGB()
     ui->hls1->setText(QString::number(color.hslHueF()));
     ui->hls2->setText(QString::number(color.hslSaturationF()));
     ui->hls3->setText(QString::number(color.lightnessF()));
+    std::pair<float, std::pair<float, float> > xyz = RGBtoXYZ();
+    ui->xyz1->setText(QString::number(xyz.first));
+    ui->xyz2->setText(QString::number(xyz.second.first));
+    ui->xyz3->setText(QString::number(xyz.second.second));
+    ui->warning->clear();
     update();
-    //  qDebug() << "changed";
 }
 
 void MainWindow::recalcCMYK()
@@ -232,6 +248,11 @@ void MainWindow::recalcCMYK()
     ui->hls1->setText(QString::number(color.hslHueF()));
     ui->hls2->setText(QString::number(color.hslSaturationF()));
     ui->hls3->setText(QString::number(color.lightnessF()));
+    std::pair<float, std::pair<float, float> > xyz = RGBtoXYZ();
+    ui->xyz1->setText(QString::number(xyz.first));
+    ui->xyz2->setText(QString::number(xyz.second.first));
+    ui->xyz3->setText(QString::number(xyz.second.second));
+    ui->warning->clear();
     update();
 }
 
@@ -248,6 +269,11 @@ void MainWindow::recalcHSV()
     ui->hls1->setText(QString::number(color.hslHueF()));
     ui->hls2->setText(QString::number(color.hslSaturationF()));
     ui->hls3->setText(QString::number(color.lightnessF()));
+    std::pair<float, std::pair<float, float> > xyz = RGBtoXYZ();
+    ui->xyz1->setText(QString::number(xyz.first));
+    ui->xyz2->setText(QString::number(xyz.second.first));
+    ui->xyz3->setText(QString::number(xyz.second.second));
+    ui->warning->clear();
     update();
 }
 
@@ -264,7 +290,94 @@ void MainWindow::recalcHLS()
     ui->hsv1->setText(QString::number(color.hueF()));
     ui->hsv2->setText(QString::number(color.saturationF()));
     ui->hsv3->setText(QString::number(color.valueF()));
+    std::pair<float, std::pair<float, float> > xyz = RGBtoXYZ();
+    ui->xyz1->setText(QString::number(xyz.first));
+    ui->xyz2->setText(QString::number(xyz.second.first));
+    ui->xyz3->setText(QString::number(xyz.second.second));
+    ui->warning->clear();
     update();
+}
+
+void MainWindow::recalcXYZ()
+{
+    XYZtoRGB(ui->xyz1->text().toFloat(), ui->xyz2->text().toFloat(), ui->xyz3->text().toFloat());
+    ui->rgb1->setText(QString::number(color.red()));
+    ui->rgb2->setText(QString::number(color.green()));
+    ui->rgb3->setText(QString::number(color.blue()));
+    ui->cmyk1->setText(QString::number(color.cyanF()));
+    ui->cmyk2->setText(QString::number(color.magentaF()));
+    ui->cmyk3->setText(QString::number(color.yellowF()));
+    ui->cmyk4->setText(QString::number(color.blackF()));
+    ui->hsv1->setText(QString::number(color.hueF()));
+    ui->hsv2->setText(QString::number(color.saturationF()));
+    ui->hsv3->setText(QString::number(color.valueF()));
+    ui->hls1->setText(QString::number(color.hslHueF()));
+    ui->hls2->setText(QString::number(color.hslSaturationF()));
+    ui->hls3->setText(QString::number(color.lightnessF()));
+    update();
+}
+
+std::pair<float, std::pair<float, float> > MainWindow::RGBtoXYZ()
+{
+    float R = color.red(), G = color.green(), B = color.blue();
+
+    float var_R = (R / 255);
+    float var_G = (G / 255);
+    float var_B = (B / 255);
+
+    if(var_R > 0.04045) var_R = pow(((var_R + 0.055) / 1.055), 2.4);
+        else var_R = var_R / 12.92;
+    if(var_G > 0.04045) var_G = pow(((var_G + 0.055) / 1.055), 2.4);
+        else var_G = var_G / 12.92;
+    if(var_B > 0.04045) var_B = pow(((var_B + 0.055) / 1.055), 2.4);
+        else var_B = var_B / 12.92;
+
+    var_R *= 100;
+    var_G *= 100;
+    var_B *= 100;
+
+    float X = var_R * 0.4124 + var_G * 0.3576 + var_B * 0.1805;
+    float Y = var_R * 0.2126 + var_G * 0.7152 + var_B * 0.0722;
+    float Z = var_R * 0.0193 + var_G * 0.1192 + var_B * 0.9505;
+
+    return {X, {Y, Z}};
+
+}
+
+void MainWindow::XYZtoRGB(float X, float Y, float Z)
+{
+    float var_X = X / 100;
+    float var_Y = Y / 100;
+    float var_Z = Z / 100;
+
+    float var_R = var_X * 3.2406 + var_Y * (-1.5372) + var_Z * (-0.4986);
+    float var_G = var_X * (-0.9689) + var_Y * 1.8758 + var_Z * 0.0415;
+    float var_B = var_X * 0.0557 + var_Y * (-0.2040) + var_Z * 1.0570;
+
+    if(var_R > 0.0031308) var_R = 1.055 * (pow(var_R, double(1/2.4))) - 0.055;
+        else var_R = 12.92 * var_R;
+    if(var_G > 0.0031308) var_G = 1.055 * (pow(var_G, double(1/2.4))) - 0.055;
+        else var_G = 12.92 * var_G;
+    if(var_B > 0.0031308) var_B = 1.055 * (pow(var_B, double(1/2.4))) - 0.055;
+        else var_B = 12.92 * var_B;
+
+    int R = var_R * 255;
+    int G = var_G * 255;
+    int B = var_B * 255;
+
+
+    if(R<0||G<0||B<0||R>255||G>255||B>255) {
+        ui->warning->setText("XYZ to RGB conversion error. RGB rounded to the nearest possible values");
+    }
+
+    if(R<0) R = 0;
+    if(G<0) G = 0;
+    if(B<0) B = 0;
+    if(R>255) R = 255;
+    if(G>255) G = 255;
+    if(B>255) B = 255;
+
+    color.setRgb(R,G,B);
 }
 
 
