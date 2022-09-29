@@ -27,9 +27,12 @@ private slots:
     void recalcHSV();
     void recalcHLS();
     void recalcXYZ();
+    void recalcLAB();
 
     std::pair <float, std::pair<float,float> > RGBtoXYZ();
     void XYZtoRGB(float, float, float);
+    void LABtoXYZ(float, float, float);
+    void XYZtoLAB(float, float, float);
 
     void on_cmyk_stateChanged(int arg1);
 

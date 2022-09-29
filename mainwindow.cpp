@@ -17,28 +17,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     howManyLinesDisplayed = 0;
 
-  //  ww = new widget(this);
-
-    //ww->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-
-  //  ui->paintLayout->addWidget(ww);
-  //  ui->chooseColorButton->hide();
-   // ui->paintLayout->addWidget(chooseColorButton, 1);
-
-   /* ww = new widget(this);
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(ww);
-  //  ui->verticalLayout->addWidget(ww,0,0);
-
-    QPushButton* chooseColorButton = new QPushButton("Choose Color");
-    layout->addWidget(chooseColorButton);
-    */
-  //  connect(chooseColorButton, SIGNAL(clicked()), this, SLOT(on_chooseColorButton_clicked()));
-   /* parent->setLayout(layout);
-    parent->show();*/
-  //  setLayout(layout);
-
-
     connect(ui->rgb1, SIGNAL(textEdited(QString)), this, SLOT(recalcRGB()));
     connect(ui->rgb2, SIGNAL(textEdited(QString)), this, SLOT(recalcRGB()));
     connect(ui->rgb3, SIGNAL(textEdited(QString)), this, SLOT(recalcRGB()));
@@ -55,6 +33,9 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->xyz1, SIGNAL(textEdited(QString)), this, SLOT(recalcXYZ()));
     connect(ui->xyz2, SIGNAL(textEdited(QString)), this, SLOT(recalcXYZ()));
     connect(ui->xyz3, SIGNAL(textEdited(QString)), this, SLOT(recalcXYZ()));
+    connect(ui->lab1, SIGNAL(textEdited(QString)), this, SLOT(recalcLAB()));
+    connect(ui->lab2, SIGNAL(textEdited(QString)), this, SLOT(recalcLAB()));
+    connect(ui->lab3, SIGNAL(textEdited(QString)), this, SLOT(recalcLAB()));
 
     ui->rgb1->hide();
     ui->rgb2->hide();
@@ -88,11 +69,14 @@ MainWindow::MainWindow(QWidget *parent)
     ui->cmykLabel->hide();
 
     QString range = "(?:0|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])";
-    QString rangeFloat = "(?:0[.][0-9]{1,}|1)";
+    QString rangeFloat = "(?:0[.][0-9]{1,}|[-]{0,1}1)";
+    QString notStrings = "(?:[-]{0,1}[0-9]{1,}[.][0-9]{1,})";
     QRegExp regex ("^" + range + "$");
     QRegExp regexFloat("^" + rangeFloat + "$");
+    QRegExp regexNotStrings("^" + notStrings + "$");
     QRegExpValidator *valid = new QRegExpValidator(regex, this);
     QRegExpValidator *validFloat = new QRegExpValidator(regexFloat, this);
+    QRegExpValidator *validNotStrings = new QRegExpValidator(regexNotStrings, this);
     ui->rgb1->setValidator(valid);
     ui->rgb2->setValidator(valid);
     ui->rgb3->setValidator(valid);
@@ -106,6 +90,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->cmyk2->setValidator(validFloat);
     ui->cmyk3->setValidator(validFloat);
     ui->cmyk4->setValidator(validFloat);
+    ui->xyz1->setValidator(validNotStrings);
+    ui->xyz2->setValidator(validNotStrings);
+    ui->xyz3->setValidator(validNotStrings);
+    ui->lab1->setValidator(validNotStrings);
+    ui->lab2->setValidator(validNotStrings);
+    ui->lab3->setValidator(validNotStrings);
 
     ui->chooseColorButton->setStyleSheet("QPushButton { color: rgb(255,255,255); background: rgb(75,75,75); }");
 
@@ -137,17 +127,9 @@ MainWindow::MainWindow(QWidget *parent)
     QPalette darkPalette;
     darkPalette.setColor(QPalette::Window, QColor(50,50,50));
 
-  //  darkPalette.setColor(QPalette::Base, QColor(52,89,111));
     darkPalette.setColor(QPalette::WindowText, QColor(255,255,255));
- /*   darkPalette.setColor(QPalette::HighlightedText, QColor(255,0,0));
-    darkPalette.setColor(QPalette::Highlight, QColor(245,245,245));*/
-  //  darkPalette.setColor(QPalette::Base, QColor(52,89,111));
- //   darkPalette.setColor(QPalette::Text, QColor(255,255,255));
- /*   darkPalette.setColor(QPalette::Button, QColor(0,0,0));
-    darkPalette.setColor(QPalette::ButtonText, QColor(245,245,245));*/
-    this->setPalette(darkPalette);
 
-    //recalcRGB();
+    this->setPalette(darkPalette);
 
     color = Qt::red;
     ui->rgb1->setText(QString::number(color.red()));
@@ -167,8 +149,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->xyz1->setText(QString::number(xyz.first));
     ui->xyz2->setText(QString::number(xyz.second.first));
     ui->xyz3->setText(QString::number(xyz.second.second));
+    XYZtoLAB(xyz.first, xyz.second.first, xyz.second.second);
     ui->warning->clear();
     update();
+
+    ui->rgb->setChecked(true);
+    ui->hsv->setChecked(true);
+    ui->xyz->setChecked(true);
 }
 
 void MainWindow::paintEvent(QPaintEvent *) {
@@ -210,6 +197,7 @@ void MainWindow::on_chooseColorButton_clicked()
     ui->xyz1->setText(QString::number(xyz.first));
     ui->xyz2->setText(QString::number(xyz.second.first));
     ui->xyz3->setText(QString::number(xyz.second.second));
+    XYZtoLAB(xyz.first, xyz.second.first, xyz.second.second);
     ui->warning->clear();
     update();
 
@@ -232,6 +220,7 @@ void MainWindow::recalcRGB()
     ui->xyz1->setText(QString::number(xyz.first));
     ui->xyz2->setText(QString::number(xyz.second.first));
     ui->xyz3->setText(QString::number(xyz.second.second));
+    XYZtoLAB(xyz.first, xyz.second.first, xyz.second.second);
     ui->warning->clear();
     update();
 }
@@ -252,6 +241,7 @@ void MainWindow::recalcCMYK()
     ui->xyz1->setText(QString::number(xyz.first));
     ui->xyz2->setText(QString::number(xyz.second.first));
     ui->xyz3->setText(QString::number(xyz.second.second));
+    XYZtoLAB(xyz.first, xyz.second.first, xyz.second.second);
     ui->warning->clear();
     update();
 }
@@ -273,6 +263,7 @@ void MainWindow::recalcHSV()
     ui->xyz1->setText(QString::number(xyz.first));
     ui->xyz2->setText(QString::number(xyz.second.first));
     ui->xyz3->setText(QString::number(xyz.second.second));
+    XYZtoLAB(xyz.first, xyz.second.first, xyz.second.second);
     ui->warning->clear();
     update();
 }
@@ -294,6 +285,7 @@ void MainWindow::recalcHLS()
     ui->xyz1->setText(QString::number(xyz.first));
     ui->xyz2->setText(QString::number(xyz.second.first));
     ui->xyz3->setText(QString::number(xyz.second.second));
+    XYZtoLAB(xyz.first, xyz.second.first, xyz.second.second);
     ui->warning->clear();
     update();
 }
@@ -314,6 +306,30 @@ void MainWindow::recalcXYZ()
     ui->hls1->setText(QString::number(color.hslHueF()));
     ui->hls2->setText(QString::number(color.hslSaturationF()));
     ui->hls3->setText(QString::number(color.lightnessF()));
+    XYZtoLAB(ui->xyz1->text().toFloat(), ui->xyz2->text().toFloat(), ui->xyz3->text().toFloat());
+    update();
+}
+
+void MainWindow::recalcLAB()
+{
+    LABtoXYZ(ui->lab1->text().toFloat(), ui->lab2->text().toFloat(), ui->lab3->text().toFloat());
+    ui->rgb1->setText(QString::number(color.red()));
+    ui->rgb2->setText(QString::number(color.green()));
+    ui->rgb3->setText(QString::number(color.blue()));
+    ui->cmyk1->setText(QString::number(color.cyanF()));
+    ui->cmyk2->setText(QString::number(color.magentaF()));
+    ui->cmyk3->setText(QString::number(color.yellowF()));
+    ui->cmyk4->setText(QString::number(color.blackF()));
+    ui->hsv1->setText(QString::number(color.hueF()));
+    ui->hsv2->setText(QString::number(color.saturationF()));
+    ui->hsv3->setText(QString::number(color.valueF()));
+    ui->hls1->setText(QString::number(color.hslHueF()));
+    ui->hls2->setText(QString::number(color.hslSaturationF()));
+    ui->hls3->setText(QString::number(color.lightnessF()));
+    std::pair<float, std::pair<float, float> > xyz = RGBtoXYZ();
+    ui->xyz1->setText(QString::number(xyz.first));
+    ui->xyz2->setText(QString::number(xyz.second.first));
+    ui->xyz3->setText(QString::number(xyz.second.second));
     update();
 }
 
@@ -354,11 +370,11 @@ void MainWindow::XYZtoRGB(float X, float Y, float Z)
     float var_G = var_X * (-0.9689) + var_Y * 1.8758 + var_Z * 0.0415;
     float var_B = var_X * 0.0557 + var_Y * (-0.2040) + var_Z * 1.0570;
 
-    if(var_R > 0.0031308) var_R = 1.055 * (pow(var_R, double(1/2.4))) - 0.055;
+    if(var_R > 0.0031308) var_R = 1.055 * (pow(var_R, double(1)/2.4)) - 0.055;
         else var_R = 12.92 * var_R;
-    if(var_G > 0.0031308) var_G = 1.055 * (pow(var_G, double(1/2.4))) - 0.055;
+    if(var_G > 0.0031308) var_G = 1.055 * (pow(var_G, double(1)/2.4)) - 0.055;
         else var_G = 12.92 * var_G;
-    if(var_B > 0.0031308) var_B = 1.055 * (pow(var_B, double(1/2.4))) - 0.055;
+    if(var_B > 0.0031308) var_B = 1.055 * (pow(var_B, double(1)/2.4)) - 0.055;
         else var_B = 12.92 * var_B;
 
     int R = var_R * 255;
@@ -367,8 +383,8 @@ void MainWindow::XYZtoRGB(float X, float Y, float Z)
 
 
     if(R<0||G<0||B<0||R>255||G>255||B>255) {
-        ui->warning->setText("XYZ to RGB conversion error. RGB rounded to the nearest possible values");
-    }
+        ui->warning->setText("Conversion error. Color models rounded to the nearest possible values");
+    } else ui->warning->clear();
 
     if(R<0) R = 0;
     if(G<0) G = 0;
@@ -380,7 +396,48 @@ void MainWindow::XYZtoRGB(float X, float Y, float Z)
     color.setRgb(R,G,B);
 }
 
+void MainWindow::LABtoXYZ(float L, float A, float B)
+{
+    float var_Y = (L + 16) / 116;
+    float var_X = A / 500 + var_Y;
+    float var_Z = var_Y - B / 200;
 
+    if(pow(var_Y, 3) > 0.008856) var_Y = pow(var_Y, 3);
+        else var_Y = (var_Y - float(16) / 116) / 7.787;
+    if(pow(var_X, 3) > 0.008856) var_X = pow(var_X, 3);
+        else var_X = (var_X - float(16) / 116) / 7.787;
+    if(pow(var_Z, 3) > 0.008856) var_Z = pow(var_Z, 3);
+        else var_Z = (var_Z - float(16) / 116) / 7.787;
+
+    float X = var_X * 95.047;
+    float Y = var_Y * 100;
+    float Z = var_Z * 108.883;
+
+    XYZtoRGB(X, Y, Z);
+}
+
+void MainWindow::XYZtoLAB(float X, float Y, float Z)
+{
+    float var_X = X / 95.047;
+    float var_Y = Y / 100;
+    float var_Z = Z / 108.883;
+
+    if(var_X > 0.008856) var_X = pow(var_X, float(1)/3);
+        else var_X = (7.787 * var_X) + float(16) / 116;
+    if(var_Y > 0.008856) var_Y = pow(var_Y, float(1)/3);
+        else var_Y = (7.787 * var_Y) + float(16) / 116;
+    if(var_Z > 0.008856) var_Z = pow(var_Z, float(1)/3);
+        else var_Z = (7.787 * var_Z) + float(16) / 116;
+
+    float L = 116 * var_Y - 16;
+    float A = 500 * (var_X - var_Y);
+    float B = 200 * (var_Y - var_Z);
+
+    ui->lab1->setText(QString::number(L));
+    ui->lab2->setText(QString::number(A));
+    ui->lab3->setText(QString::number(B));
+    update();
+}
 
 void MainWindow::on_cmyk_stateChanged(int arg1)
 {

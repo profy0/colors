@@ -10,10 +10,6 @@ class widget : public QWidget
 public:
 
     widget(QWidget *parent = 0);
-    QColor color;
-
-protected:
-    void paintEvent(QPaintEvent *) override;
 
 };
 
