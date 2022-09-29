@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QtWidgets>
-#include "widget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,7 +21,7 @@ protected:
 
 private slots:
     void on_chooseColorButton_clicked();
-    void recalcRGB();
+    void recalcRGB();   // функции пересчета значений для каждой модели
     void recalcCMYK();
     void recalcHSV();
     void recalcHLS();
@@ -48,10 +47,8 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QColor color;
-    widget *ww;
-    QPushButton *chooseColorButton;
-    int howManyLinesDisplayed;
+    QColor color; // цвет, с которым работает программа
+    QPushButton *chooseColorButton; // кнопка выбора цвета
 
 };
 #endif // MAINWINDOW_H

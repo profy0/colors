@@ -1,3 +1,8 @@
+/*
+ * При разработке приложения использовались стандартные библиотеки Qt
+*/
+
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QPainter>
@@ -15,9 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->chooseColorButton->setText("Choose color");
 
-    howManyLinesDisplayed = 0;
-
-    connect(ui->rgb1, SIGNAL(textEdited(QString)), this, SLOT(recalcRGB()));
+    connect(ui->rgb1, SIGNAL(textEdited(QString)), this, SLOT(recalcRGB()));           // Подключение функций пересчета значений для каждой модели
     connect(ui->rgb2, SIGNAL(textEdited(QString)), this, SLOT(recalcRGB()));
     connect(ui->rgb3, SIGNAL(textEdited(QString)), this, SLOT(recalcRGB()));
     connect(ui->cmyk1, SIGNAL(textEdited(QString)), this, SLOT(recalcCMYK()));
@@ -37,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->lab2, SIGNAL(textEdited(QString)), this, SLOT(recalcLAB()));
     connect(ui->lab3, SIGNAL(textEdited(QString)), this, SLOT(recalcLAB()));
 
-    ui->rgb1->hide();
+    ui->rgb1->hide();       // Сначала все модели скрываются от пользователя. Позже пользователь сможет сам выбирать какие модели он хочет видеть
     ui->rgb2->hide();
     ui->rgb3->hide();
     ui->rgbLabel->hide();
@@ -69,13 +72,13 @@ MainWindow::MainWindow(QWidget *parent)
     ui->cmykLabel->hide();
 
     QString range = "(?:0|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])";
-    QString rangeFloat = "(?:0[.][0-9]{1,3}|[-]{0,1}1[.][0]{1,3})";
+    QString rangeFloat = "(?:0[.][0-9]{1,3}|[-]{0,1}1[.][0]{1,3})";       // Регулярные выражения для валидатора
     QString notStrings = "(?:[-]{0,1}[0-9]{1,3}[.][0-9]{1,3})";
     QRegExp regex ("^" + range + "$");
     QRegExp regexFloat("^" + rangeFloat + "$");
     QRegExp regexNotStrings("^" + notStrings + "$");
     QRegExpValidator *valid = new QRegExpValidator(regex, this);
-    QRegExpValidator *validFloat = new QRegExpValidator(regexFloat, this);
+    QRegExpValidator *validFloat = new QRegExpValidator(regexFloat, this);            // Валидаторы
     QRegExpValidator *validNotStrings = new QRegExpValidator(regexNotStrings, this);
     ui->rgb1->setValidator(valid);
     ui->rgb2->setValidator(valid);
@@ -97,9 +100,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->lab2->setValidator(validNotStrings);
     ui->lab3->setValidator(validNotStrings);
 
-    ui->chooseColorButton->setStyleSheet("QPushButton { color: rgb(255,255,255); background: rgb(75,75,75); }");
+    ui->chooseColorButton->setStyleSheet("QPushButton { color: rgb(255,255,255); background: rgb(75,75,75); }");  // Изменение цвета кнопки выбора цвета
 
-    ui->rgb1->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
+    ui->rgb1->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");  // Изменение цвета для каждого QLineEdit, где пользователь может вводить конкретные значения для каждой модели
     ui->rgb2->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
     ui->rgb3->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
 
@@ -125,14 +128,14 @@ MainWindow::MainWindow(QWidget *parent)
     ui->cmyk4->setStyleSheet("QLineEdit { color: rgb(255,255,255); background-color: rgb(75, 75, 75); border: 1px solid rgb(75,75,75)}");
 
     QPalette darkPalette;
-    darkPalette.setColor(QPalette::Window, QColor(50,50,50));
+    darkPalette.setColor(QPalette::Window, QColor(50,50,50)); // Изменение цвета окна
 
-    darkPalette.setColor(QPalette::WindowText, QColor(255,255,255));
+    darkPalette.setColor(QPalette::WindowText, QColor(255,255,255)); // Изменение цвета оконного текста
 
     this->setPalette(darkPalette);
 
-    color = Qt::red;
-    ui->rgb1->setText(QString::number(color.red()));
+    color = Qt::red; // Начальный цвет
+    ui->rgb1->setText(QString::number(color.red()));     // Пересчет значений каждой модели для начального цвета
     ui->rgb2->setText(QString::number(color.green()));
     ui->rgb3->setText(QString::number(color.blue()));
     ui->cmyk1->setText(QString::number(color.cyanF(), 'f', 3));
@@ -153,12 +156,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->warning->clear();
     update();
 
-    ui->rgb->setChecked(true);
+    ui->rgb->setChecked(true); // Задание данных моделей включенными при запуске программы
     ui->hsv->setChecked(true);
     ui->xyz->setChecked(true);
 }
 
-void MainWindow::paintEvent(QPaintEvent *) {
+void MainWindow::paintEvent(QPaintEvent *) {  // Функция, которая отображает выбранный цвет
     QPainter p;
     p.begin(this);
     p.setPen(QColor(75,75,75));
@@ -177,7 +180,7 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::on_chooseColorButton_clicked()
+void MainWindow::on_chooseColorButton_clicked()  // Функция, которая позволяет выбрать цвет
 {
     color = QColorDialog::getColor();
     ui->rgb1->setText(QString::number(color.red()));
@@ -203,7 +206,7 @@ void MainWindow::on_chooseColorButton_clicked()
 
 }
 
-void MainWindow::recalcRGB()
+void MainWindow::recalcRGB()  // Пересчет значений для RGB
 {
     color.setRgb(ui->rgb1->text().toInt(), ui->rgb2->text().toInt(), ui->rgb3->text().toInt());
     ui->cmyk1->setText(QString::number(color.cyanF(), 'f', 3));
@@ -225,7 +228,7 @@ void MainWindow::recalcRGB()
     update();
 }
 
-void MainWindow::recalcCMYK()
+void MainWindow::recalcCMYK()  // Пересчет значений для CMYK
 {
     color.setCmykF(ui->cmyk1->text().toFloat(), ui->cmyk2->text().toFloat(), ui->cmyk3->text().toFloat(), ui->cmyk4->text().toFloat());
     ui->rgb1->setText(QString::number(color.red()));
@@ -246,7 +249,7 @@ void MainWindow::recalcCMYK()
     update();
 }
 
-void MainWindow::recalcHSV()
+void MainWindow::recalcHSV()  // Пересчет значений для HSV
 {
     color.setHsvF(ui->hsv1->text().toFloat(), ui->hsv2->text().toFloat(), ui->hsv3->text().toFloat());
     ui->rgb1->setText(QString::number(color.red()));
@@ -268,7 +271,7 @@ void MainWindow::recalcHSV()
     update();
 }
 
-void MainWindow::recalcHLS()
+void MainWindow::recalcHLS()  // Пересчет значений для HSL
 {
     color.setHslF(ui->hls1->text().toFloat(), ui->hls2->text().toFloat(), ui->hls3->text().toFloat());
     ui->rgb1->setText(QString::number(color.red()));
@@ -290,7 +293,7 @@ void MainWindow::recalcHLS()
     update();
 }
 
-void MainWindow::recalcXYZ()
+void MainWindow::recalcXYZ()  // Пересчет значений для XYZ
 {
     XYZtoRGB(ui->xyz1->text().toFloat(), ui->xyz2->text().toFloat(), ui->xyz3->text().toFloat());
     ui->rgb1->setText(QString::number(color.red()));
@@ -310,7 +313,7 @@ void MainWindow::recalcXYZ()
     update();
 }
 
-void MainWindow::recalcLAB()
+void MainWindow::recalcLAB()  // Пересчет значений для LAB
 {
     LABtoXYZ(ui->lab1->text().toFloat(), ui->lab2->text().toFloat(), ui->lab3->text().toFloat());
     ui->rgb1->setText(QString::number(color.red()));
@@ -333,7 +336,7 @@ void MainWindow::recalcLAB()
     update();
 }
 
-std::pair<float, std::pair<float, float> > MainWindow::RGBtoXYZ()
+std::pair<float, std::pair<float, float> > MainWindow::RGBtoXYZ()  // Перевод RGB в XYZ
 {
     float R = color.red(), G = color.green(), B = color.blue();
 
@@ -360,7 +363,7 @@ std::pair<float, std::pair<float, float> > MainWindow::RGBtoXYZ()
 
 }
 
-void MainWindow::XYZtoRGB(float X, float Y, float Z)
+void MainWindow::XYZtoRGB(float X, float Y, float Z) // Перевод XYZ в RGB
 {
     float var_X = X / 100;
     float var_Y = Y / 100;
@@ -382,11 +385,11 @@ void MainWindow::XYZtoRGB(float X, float Y, float Z)
     int B = var_B * 255;
 
 
-    if(R<0||G<0||B<0||R>255||G>255||B>255) {
+    if(R<0||G<0||B<0||R>255||G>255||B>255) { // Проверка на то, что перевод из XYZ в RGB прошел без выхода за пределы
         ui->warning->setText("Conversion error. Color models rounded to the nearest possible values");
     } else ui->warning->clear();
 
-    if(R<0) R = 0;
+    if(R<0) R = 0;  // Если при переводе RGB вышло за допустимые границы, то им присваиваются ближайшие допустимые
     if(G<0) G = 0;
     if(B<0) B = 0;
     if(R>255) R = 255;
@@ -396,7 +399,7 @@ void MainWindow::XYZtoRGB(float X, float Y, float Z)
     color.setRgb(R,G,B);
 }
 
-void MainWindow::LABtoXYZ(float L, float A, float B)
+void MainWindow::LABtoXYZ(float L, float A, float B)  // Функция перевода из LAB в XYZ
 {
     float var_Y = (L + 16) / 116;
     float var_X = A / 500 + var_Y;
@@ -416,7 +419,7 @@ void MainWindow::LABtoXYZ(float L, float A, float B)
     XYZtoRGB(X, Y, Z);
 }
 
-void MainWindow::XYZtoLAB(float X, float Y, float Z)
+void MainWindow::XYZtoLAB(float X, float Y, float Z) // Функция перевода из XYZ в LAB
 {
     float var_X = X / 95.047;
     float var_Y = Y / 100;
@@ -433,11 +436,15 @@ void MainWindow::XYZtoLAB(float X, float Y, float Z)
     float A = 500 * (var_X - var_Y);
     float B = 200 * (var_Y - var_Z);
 
-    ui->lab1->setText(QString::number(L, 'f', 3));
+    ui->lab1->setText(QString::number(L, 'f', 3));  // Значения сразу отображаются пользователю
     ui->lab2->setText(QString::number(A, 'f', 3));
     ui->lab3->setText(QString::number(B, 'f', 3));
     update();
 }
+
+/*
+ * Далее методы отображения/скрытия цветовых моделей от пользователя
+*/
 
 void MainWindow::on_cmyk_stateChanged(int arg1)
 {
